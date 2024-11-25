@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
+from DIDs.views import buscarCompania, buscarTarifa, buscarDID, registrarCompania, registrarDID, registrarTarifa
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('BuscarDIDs/', buscarDID),
+    path('RegistrarDIDs/', registrarDID),
+    path('BuscarTarifa/', buscarTarifa),
+    path('RegistrarTarifa/', registrarTarifa),
+    path('BuscarComp/', buscarCompania),
+    path('RegistrarComp/', registrarCompania),
 ]
