@@ -3,6 +3,9 @@ from django.template import Template, Context, loader
 from django.http import HttpResponse
 # Create your views here.
 
+def inicio(request):
+    return render(request,'dids/inicio.html')
+
 def buscarDID(request):
     return HttpResponse("Aca se buscan DIDs")
 
