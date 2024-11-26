@@ -7,19 +7,16 @@ def inicio(request):
     return render(request,'dids/inicio.html')
 
 def buscarDID(request):
-    return HttpResponse("Aca se buscan DIDs")
+    return render(request, 'dids/DIDsSearch.html')
 
 def registrarDID(request):
-    return HttpResponse("Aca se registran DIDs")
+    return render(request, 'dids/NewDIDs.html')
 
 def buscarTarifa(request):
-    return HttpResponse("Aca se buscan Tarifas")
-
-def registrarTarifa(request):
-    return HttpResponse("Aca se registran Tarifas")
+    return render(request, 'dids/PriceSearch.html')
 
 def buscarCompania(request):
-    return HttpResponse("Aca se buscan Companias")
+    return render(request, 'dids/CompanySearch.html')
 
 def registrarCompania(request):
-    return HttpResponse("Aca se registran Companias")
+    return render(request, 'dids/NewCompany.html')
