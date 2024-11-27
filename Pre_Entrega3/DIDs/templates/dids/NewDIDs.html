@@ -85,8 +85,8 @@
     {% block title %}Página de Inicio{% endblock %}
 
     {% block contenidoQueCambia %}
-    <form action="RegistrarDIDs/" method="POST">
-        
+    <form action="{% url 'RegDIDs' %}" method="POST">
+        {% csrf_token %}
         <h1>New Number</h1>
 
         <label for="numero">DID Number:</label>
