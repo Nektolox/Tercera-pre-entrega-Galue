@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import Template, Context, loader
 from django.http import HttpResponse
-from DIDs.models import DID
+from DIDs.models import DID, Tarifa, Compania
 # Create your views here.
 
 def inicio(request):
@@ -17,18 +17,35 @@ def registrarDID(request):
         numero=DID(numero=request.POST["numero"],pais=request.POST["pais"],empresa=request.POST["empresa"],minutos_uso=request.POST["minutos_uso"])
         numero.save()
 
-        return render(request,'DIDs/inicio.html')
+        return render(request,'dids/inicio.html')
     
-    return render(request, 'DIDs/NewDIDs.html')
+    return render(request, 'dids/NewDIDs.html')
 
 def buscarTarifa(request):
     return render(request, 'dids/PriceSearch.html')
 
 def registrarTarifa(request):
-    return render(request, 'dids/NewPrice.html')
+
+    if request.method == "POST":  
+       
+        tarifa=Tarifa(trafico_entrante=request.POST["trafico_entrante"],trafico_saliente=request.POST["trafico_saliente"],precio_por_numero=request.POST["precio_por_numero"],pais=request.POST["pais"])
+        tarifa.save()
+
+        return render(request,'dids/inicio.html')
+    
+    return render(request, 'dids/NewPrice.html') 
 
 def buscarCompania(request):
     return render(request, 'dids/CompanySearch.html')
 
 def registrarCompania(request):
+    
+    if request.method == "POST":  
+       
+        compania=Compania(direccion=request.POST["direccion"],codigo_postal=request.POST["codigo_postal"],nombre=request.POST["nombre"],persona_contacto=request.POST["persona_contacto"],NOCemail=request.POST["NOCemail"])
+        compania.save()
+
+        return render(request,'dids/inicio.html')
+    
     return render(request, 'dids/NewCompany.html')
+
