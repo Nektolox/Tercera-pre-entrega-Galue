@@ -36,6 +36,20 @@ def registrarDID(request):
     return render(request, 'dids/NewDIDs.html')
 
 def buscarTarifa(request):
+    
+    resultado = None 
+    mensaje = None 
+    
+    if 'pais' in request.GET: 
+        pais = request.GET['pais'] 
+        try: 
+            resultado = Tarifa.objects.get(pais=pais) 
+        except Tarifa.DoesNotExist: 
+            mensaje = "La tarifa para el país buscado no se encuentra registrada." 
+    
+        return render(request, 'dids/PriceSearch.html', {'resultado': resultado, 'mensaje': mensaje})
+    
+    
     return render(request, 'dids/PriceSearch.html')
 
 def registrarTarifa(request):
@@ -50,6 +64,19 @@ def registrarTarifa(request):
     return render(request, 'dids/NewPrice.html') 
 
 def buscarCompania(request):
+    
+    resultado = None 
+    mensaje = None 
+    
+    if 'nombre' in request.GET: 
+        nombre = request.GET['nombre'] 
+        try: 
+            resultado = Compania.objects.get(nombre=nombre) 
+        except Compania.DoesNotExist: 
+            mensaje = "La compañía no se encuentra registrada." 
+        
+        return render(request, 'dids/CompanySearch.html', {'resultado': resultado, 'mensaje': mensaje})
+    
     return render(request, 'dids/CompanySearch.html')
 
 def registrarCompania(request):
