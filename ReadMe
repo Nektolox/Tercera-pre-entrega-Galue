@@ -1,0 +1,99 @@
+# Portal de DIDs realizado por Neptali Galue
+
+Un DIDs son números de telefono que comercializan empresas de Telecomunicaciones, con el fin de 
+darle un tratamiento especial a aquellos numeros telefonicos que pertenezcan a servicios de alta demanda. Por ejemplo: números de emergencias, empresas, etc.
+
+En este proyecto contaremos de 7 views en las cuales podremos encontrar una pagina de inicio y 6 formularios: 3 de busqueda y 3 de registro.
+
+El proyecto cuenta con una barra de navegación en la parte superior, a continuación se describe cada una:
+
+# Inicio
+
+Simplementes es la pagina de presentación, la idea es leer la presentación y seleccionar una de las opciones de la barra de navegación
+
+# DID Search
+
+Aqui se puede buscar un numero DIDs, si el numero esta registrado obtendremos la información del numero:
+
+Country: Pais al que pertenece el número
+
+Company: Compañia que tiene el número asignado
+
+MOU: Minutos de uso asignados al número consultado 
+
+Se pueden buscar los numeros: 5491151386624 y 584141031198
+
+Si el número no esta en la base de datos arrojara un mensaje de número inexistente y dejara buscar uno nuevo
+
+# Add DID
+
+Aqui se puede agregar o registrar un numero nuevo en la base de datos. Para ello va a pedir:
+
+DID Number: numero de telefono que se desea agregar a la base de datos
+
+Country: Pais al que pertenece el número
+
+Company: Compañia a la cual se asignara el numero
+
+MOU: Minutos de uso que se desean asignar 
+
+
+# Price Search
+
+Aqui se puede buscar la tarifa que se ofrece en función del pais al que pertenece un DID, si el pais esta registrado obtendremos la información finaciera:
+
+Incoming Price: Precio que tiene el minuto de llamada al marcar numeros de ese pais
+
+Outgoing Price: Precio que tiene el minuto de llamada al marcar numeros de ese pais
+
+Price per Number: Precio que se cobra mensualmente por tener asignado un numero de este pais
+
+Se pueden buscar los paises: Argentina y Venezuela
+
+Si el pais no esta en la base de datos arrojara un mensaje diciendo que no existen tarifas para ese pais y dejara buscar uno nuevo
+
+# Price Offer
+
+Aqui se puede agregar o registrar una oferta nueva a la base de datos. Para ello va a pedir:
+
+Incoming Traffic: valor de 4 decimales para indicar el costo por minuto de una llamada de un numero de ese pais
+
+Outgoing Traffic: valor de 4 decimales para indicar el costo por minuto de una llamada realizada desde un numero de ese pais
+
+Price per number: precio que se cobrara mensualmente por la asignacion del numero
+Country: Minutos de uso que se desean asignar 
+
+Coyntry: pais al que pertenece el numero
+
+# Company Search
+
+Aqui se puede buscar las empresas registradas en la bse de datos, si la empresa esta registrada obtendremos:
+
+Addres: Dirección de la empresa
+
+Postal Code: Codigo Postal
+
+Contact Person: Persona asiganada como contacto de dicha empresa
+
+NOC Email: correo al cual se enviara cualquier tipo de información tecnica
+
+Se pueden buscar las empresas: "SmartBiz Telecom" e IPLAN
+
+Si el la empresa no esta en la base de datos arrojara un mensaje diciendo que no esta registrada y dejara buscar otra
+
+# New Company
+
+Aqui se puede agregar o registrar una empresa nueva en la base de datos. Para ello va a pedir:
+
+Addres: Dirección de la empresa
+
+Postal Code: Codigo Postal
+
+Company Name: Nombre de la empresa
+
+Contact Person: Persona asiganada como contacto de dicha empresa
+
+NOC Email: correo al cual se enviara cualquier tipo de información tecnica
+
+
+# Cada vez que un registro se completa de manera exitosa, regresa a la pagina de inicio.

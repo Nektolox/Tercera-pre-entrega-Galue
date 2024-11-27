@@ -18,7 +18,7 @@ def buscarDID(request):
         try: 
             resultado = DID.objects.get(numero=numero) 
         except DID.DoesNotExist: 
-            mensaje = "El número DID no se encuentra registrado." 
+            mensaje = "The DID number is not registered yet." 
             
         return render(request, 'dids/DIDsSearch.html', {'resultado': resultado, 'mensaje': mensaje})
     
@@ -45,7 +45,7 @@ def buscarTarifa(request):
         try: 
             resultado = Tarifa.objects.get(pais=pais) 
         except Tarifa.DoesNotExist: 
-            mensaje = "La tarifa para el país buscado no se encuentra registrada." 
+            mensaje = "We currently don't have a price for the requested country." 
     
         return render(request, 'dids/PriceSearch.html', {'resultado': resultado, 'mensaje': mensaje})
     
@@ -73,7 +73,7 @@ def buscarCompania(request):
         try: 
             resultado = Compania.objects.get(nombre=nombre) 
         except Compania.DoesNotExist: 
-            mensaje = "La compañía no se encuentra registrada." 
+            mensaje = "This company is not registered yet." 
         
         return render(request, 'dids/CompanySearch.html', {'resultado': resultado, 'mensaje': mensaje})
     
