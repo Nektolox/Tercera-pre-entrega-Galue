@@ -8,6 +8,20 @@ def inicio(request):
     return render(request,'dids/inicio.html')
 
 def buscarDID(request):
+    
+    resultado = None 
+    mensaje = None 
+    
+    if 'numero' in request.GET: 
+        
+        numero = request.GET['numero'] 
+        try: 
+            resultado = DID.objects.get(numero=numero) 
+        except DID.DoesNotExist: 
+            mensaje = "El número DID no se encuentra registrado." 
+            
+        return render(request, 'dids/DIDsSearch.html', {'resultado': resultado, 'mensaje': mensaje})
+    
     return render(request, 'dids/DIDsSearch.html')
 
 def registrarDID(request):
