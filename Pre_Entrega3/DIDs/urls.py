@@ -6,6 +6,7 @@ urlpatterns = [
     path('BuscarDIDs/', views.buscarDID, name="BusDIDs"),
     path('RegistrarDIDs/', views.registrarDID, name="RegDIDs"),
     path('BuscarTarifa/', views.buscarTarifa, name="BusTar"),
+    path('RegistrarTarifa/', views.registrarTarifa, name="RegTar"),
     path('BuscarComp/', views.buscarCompania, name="BusComp"),
     path('RegistrarComp/', views.registrarCompania, name="RegComp"),
 ]

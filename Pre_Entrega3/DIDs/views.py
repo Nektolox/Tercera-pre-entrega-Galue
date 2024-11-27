@@ -15,6 +15,9 @@ def registrarDID(request):
 def buscarTarifa(request):
     return render(request, 'dids/PriceSearch.html')
 
+def registrarTarifa(request):
+    return render(request, 'dids/NewPrice.html')
+
 def buscarCompania(request):
     return render(request, 'dids/CompanySearch.html')
 
