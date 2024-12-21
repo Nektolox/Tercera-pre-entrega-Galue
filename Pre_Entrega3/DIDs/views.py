@@ -25,15 +25,18 @@ def buscarDID(request):
     return render(request, 'dids/DIDsSearch.html')
 
 def registrarDID(request):
+   
+    if request.method == "POST": # Si el formulario fue enviado 
+        numero = DID(numero=request.POST["numero"], 
+                    pais=request.POST["pais"], 
+                    empresa=request.POST["empresa"], 
+                    minutos_uso=request.POST["minutos_uso"]) 
+        numero.save() 
+        return render(request, 'dids/inicio.html') 
     
-    if request.method == "POST":  # Si el formulario fue enviado
-       
-        numero=DID(numero=request.POST["numero"],pais=request.POST["pais"],empresa=request.POST["empresa"],minutos_uso=request.POST["minutos_uso"])
-        numero.save()
-
-        return render(request,'dids/inicio.html')
-    
-    return render(request, 'dids/NewDIDs.html')
+    # Obtener todas las compañías para el menú desplegable 
+    companias = Compania.objects.all() 
+    return render(request, 'dids/NewDIDs.html', {'companias': companias})
 
 def buscarTarifa(request):
     

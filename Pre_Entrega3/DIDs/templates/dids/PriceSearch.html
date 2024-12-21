@@ -88,6 +88,7 @@
     {% if resultado %} 
     <div class="result-box"> 
         <h2>Search Results:</h2> 
+        <p><strong>Country:</strong> {{ resultado.pais }}</p> 
         <p><strong>Incoming Traffic Price:</strong> ${{ resultado.trafico_entrante }}</p> 
         <p><strong>Outgoing Traffic Price:</strong> ${{ resultado.trafico_saliente }}</p> 
         <p><strong>Price per Number:</strong> ${{ resultado.precio_por_numero }}</p> 

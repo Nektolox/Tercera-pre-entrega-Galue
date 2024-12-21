@@ -25,35 +25,17 @@
             color: #333;
         }
 
-        body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-
-        form {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid white;
-            border-radius: 10px;
-        }
-
         label,
-        input {
+        input,
+        select {
             display: block;
             width: 100%;
             margin-bottom: 10px;
         }
 
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             padding: 8px;
             border-radius: 5px;
             border: 1px solid white;
@@ -76,32 +58,31 @@
             color: #333;
         }
     </style>
-
 </head>
 
-<body>
-    {% extends "dids/inicio.html" %} {% load static %}
-
+<body> 
+    
+    {% extends "dids/inicio.html" %} {% load static %} 
+    
     {% block title %}Página de Inicio{% endblock %}
 
-    {% block contenidoQueCambia %}
-    <form action="{% url 'RegDIDs' %}" method="POST">
-        {% csrf_token %}
-        <h1>New Number</h1>
-
-        <label for="numero">DID Number:</label>
+    {% block contenidoQueCambia %} 
+    
+    <form action="{% url 'RegDIDs' %}" method="POST"> 
+        {% csrf_token %} 
+        <h1>New Number</h1> 
+        <label for="numero">DID Number:</label> 
         <input type="text" id="numero" name="numero" maxlength="15" required>
-        <label for="pais">Country:</label>
-        <input type="text" id="pais" name="pais" maxlength="30" required>
-        <label for="empresa">Company:</label>
-        <input type="text" id="empresa" name="empresa" maxlength="30" required>
-        <label for="minutos_uso">MOU:</label>
-        <input type="number" id="minutos_uso" name="minutos_uso" required>
-        <input type="submit" value="Enviar">
-
-    </form>
-    {% endblock %}
-
-</body>
+        <label for="pais">Country:</label> 
+        <input type="text" id="pais" name="pais" maxlength="30" required> 
+        <label for="empresa">Company:</label> 
+        <select id="empresa" name="empresa" required> 
+            {% for compania in companias %}
+            <option value="{{ compania.nombre }}">{{ compania.nombre }}</option> 
+            {% endfor %} 
+        </select> 
+        <label for="minutos_uso">MOU:</label> 
+        <input type="number" id="minutos_uso" name="minutos_uso" required> 
+        <input type="submit" value="Enviar"> </form> {% endblock %} </body>
 
 </html>
