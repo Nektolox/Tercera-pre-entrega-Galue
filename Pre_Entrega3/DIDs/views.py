@@ -1,95 +1,89 @@
-from django.shortcuts import render
-from django.template import Template, Context, loader
-from django.http import HttpResponse
-from DIDs.models import DID, Tarifa, Compania
+from django.views.generic import TemplateView, ListView, DetailView, CreateView 
+from django.shortcuts import render 
+from django.urls import reverse_lazy 
+from .models import DID, Tarifa, Compania
 # Create your views here.
 
-def inicio(request):
-    return render(request,'dids/inicio.html')
 
-def buscarDID(request):
+class InicioView(TemplateView): 
     
-    resultado = None 
-    mensaje = None 
+    template_name = 'dids/inicio.html'
+
+
+class DIDListView(TemplateView): 
     
-    if 'numero' in request.GET: 
+    template_name = 'dids/DIDsSearch.html' 
         
-        numero = request.GET['numero'] 
-        try: 
-            resultado = DID.objects.get(numero=numero) 
-        except DID.DoesNotExist: 
-            mensaje = "The DID number is not registered yet." 
+    def get_context_data(self, **kwargs): 
+        context = super().get_context_data(**kwargs) 
+        numero = self.request.GET.get('numero') 
+        if numero: 
+            try: 
+                context['resultado'] = DID.objects.get(numero=numero) 
             
-        return render(request, 'dids/DIDsSearch.html', {'resultado': resultado, 'mensaje': mensaje})
-    
-    return render(request, 'dids/DIDsSearch.html')
-
-def registrarDID(request):
-   
-    if request.method == "POST": # Si el formulario fue enviado 
-        numero = DID(numero=request.POST["numero"], 
-                    pais=request.POST["pais"], 
-                    empresa=request.POST["empresa"], 
-                    minutos_uso=request.POST["minutos_uso"]) 
-        numero.save() 
-        return render(request, 'dids/inicio.html') 
-    
-    # Obtener todas las compañías para el menú desplegable 
-    companias = Compania.objects.all() 
-    return render(request, 'dids/NewDIDs.html', {'companias': companias})
-
-def buscarTarifa(request):
-    
-    resultado = None 
-    mensaje = None 
-    
-    if 'pais' in request.GET: 
-        pais = request.GET['pais'] 
-        try: 
-            resultado = Tarifa.objects.get(pais=pais) 
-        except Tarifa.DoesNotExist: 
-            mensaje = "We currently don't have a price for the requested country." 
-    
-        return render(request, 'dids/PriceSearch.html', {'resultado': resultado, 'mensaje': mensaje})
-    
-    
-    return render(request, 'dids/PriceSearch.html')
-
-def registrarTarifa(request):
-
-    if request.method == "POST":  
-       
-        tarifa=Tarifa(trafico_entrante=request.POST["trafico_entrante"],trafico_saliente=request.POST["trafico_saliente"],precio_por_numero=request.POST["precio_por_numero"],pais=request.POST["pais"])
-        tarifa.save()
-
-        return render(request,'dids/inicio.html')
-    
-    return render(request, 'dids/NewPrice.html') 
-
-def buscarCompania(request):
-    
-    resultado = None 
-    mensaje = None 
-    
-    if 'nombre' in request.GET: 
-        nombre = request.GET['nombre'] 
-        try: 
-            resultado = Compania.objects.get(nombre=nombre) 
-        except Compania.DoesNotExist: 
-            mensaje = "This company is not registered yet." 
+            except DID.DoesNotExist: 
+                context['mensaje'] = "The DID number is not registered yet." 
         
-        return render(request, 'dids/CompanySearch.html', {'resultado': resultado, 'mensaje': mensaje})
-    
-    return render(request, 'dids/CompanySearch.html')
+        return context    
 
-def registrarCompania(request):
+class DIDCreateView(CreateView): 
     
-    if request.method == "POST":  
-       
-        compania=Compania(direccion=request.POST["direccion"],codigo_postal=request.POST["codigo_postal"],nombre=request.POST["nombre"],persona_contacto=request.POST["persona_contacto"],NOCemail=request.POST["NOCemail"])
-        compania.save()
-
-        return render(request,'dids/inicio.html')
+    model = DID 
+    template_name = 'dids/NewDIDs.html' 
+    fields = ['numero', 'pais', 'empresa', 'minutos_uso'] 
+    success_url = reverse_lazy('inicio') 
     
-    return render(request, 'dids/NewCompany.html')
+    def get_context_data(self, **kwargs): 
+        context = super().get_context_data(**kwargs) 
+        context['companias'] = Compania.objects.all().order_by('nombre') 
+        return context 
+        
+    def form_valid(self, form): 
+        form.instance.empresa = self.request.POST["empresa"] 
+        return super().form_valid(form)
 
+class TarifaListView(TemplateView): 
+        
+    template_name = 'dids/PriceSearch.html' 
+        
+    def get_context_data(self, **kwargs): 
+        context = super().get_context_data(**kwargs) 
+        pais = self.request.GET.get('pais') 
+            
+        if pais: 
+            try: 
+                context['resultado'] = Tarifa.objects.get(pais=pais) 
+            except Tarifa.DoesNotExist: 
+                context['mensaje'] = "We currently don't have a price for the requested country" 
+            
+        return context
+
+class TarifaCreateView(CreateView): 
+    
+    model = Tarifa 
+    template_name = 'dids/NewPrice.html' 
+    fields = ['trafico_entrante', 'trafico_saliente', 'precio_por_numero', 'pais'] 
+    success_url = reverse_lazy('inicio')
+
+class CompaniaListView(TemplateView): 
+    
+    template_name = 'dids/CompanySearch.html' 
+    
+    def get_context_data(self, **kwargs): 
+        context = super().get_context_data(**kwargs) 
+        nombre = self.request.GET.get('nombre') 
+        
+        if nombre: 
+            try: 
+                context['resultado'] = Compania.objects.get(nombre=nombre) 
+            except Compania.DoesNotExist: 
+                context['mensaje'] = "This company is not registered yet." 
+        
+        return context
+
+class CompaniaCreateView(CreateView): 
+    
+    model = Compania 
+    template_name = 'dids/NewCompany.html' 
+    fields = ['direccion', 'codigo_postal', 'nombre', 'persona_contacto', 'NOCemail'] 
+    success_url = reverse_lazy('inicio')

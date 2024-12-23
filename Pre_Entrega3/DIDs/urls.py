@@ -1,12 +1,12 @@
 from django.urls import path
-from DIDs import views
+from .views import InicioView, DIDListView, DIDCreateView, TarifaListView, TarifaCreateView, CompaniaListView, CompaniaCreateView
 
 urlpatterns = [
-    path('Inicio/', views.inicio, name="Inicio"),
-    path('BuscarDIDs/', views.buscarDID, name="BusDIDs"),
-    path('RegistrarDIDs/', views.registrarDID, name="RegDIDs"),
-    path('BuscarTarifa/', views.buscarTarifa, name="BusTar"),
-    path('RegistrarTarifa/', views.registrarTarifa, name="RegTar"),
-    path('BuscarComp/', views.buscarCompania, name="BusComp"),
-    path('RegistrarComp/', views.registrarCompania, name="RegComp"),
+    path('Inicio/', InicioView.as_view(), name="Inicio"),
+    path('BuscarDIDs/', DIDListView.as_view(), name="BusDIDs"),
+    path('RegistrarDIDs/', DIDCreateView.as_view(), name="RegDIDs"),
+    path('BuscarTarifa/', TarifaListView.as_view(), name="BusTar"),
+    path('RegistrarTarifa/', TarifaCreateView.as_view(), name="RegTar"),
+    path('BuscarComp/', CompaniaListView.as_view(), name="BusComp"),
+    path('RegistrarComp/', CompaniaCreateView.as_view(), name="RegComp"),
 ]
