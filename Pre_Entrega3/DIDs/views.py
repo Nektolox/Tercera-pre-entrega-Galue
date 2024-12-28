@@ -1,5 +1,5 @@
-from django.views.generic import TemplateView, ListView, DetailView, CreateView 
-from django.shortcuts import render 
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy 
 from .models import DID, Tarifa, Compania
 # Create your views here.
@@ -7,12 +7,12 @@ from .models import DID, Tarifa, Compania
 
 class InicioView(TemplateView): 
     
-    template_name = 'dids/inicio.html'
+    template_name = 'DIDs/Inicio.html'
 
 
 class DIDListView(TemplateView): 
     
-    template_name = 'dids/DIDsSearch.html' 
+    template_name = 'DIDs/DIDsSearch.html' 
         
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs) 
@@ -29,9 +29,9 @@ class DIDListView(TemplateView):
 class DIDCreateView(CreateView): 
     
     model = DID 
-    template_name = 'dids/NewDIDs.html' 
+    template_name = 'DIDs/NewDIDs.html' 
     fields = ['numero', 'pais', 'empresa', 'minutos_uso'] 
-    success_url = reverse_lazy('inicio') 
+    success_url = reverse_lazy('Inicio') 
     
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs) 
@@ -41,10 +41,41 @@ class DIDCreateView(CreateView):
     def form_valid(self, form): 
         form.instance.empresa = self.request.POST["empresa"] 
         return super().form_valid(form)
+    
+
+class DIDCompanySearchView(TemplateView):
+    template_name = 'DIDs/UD_DIDs.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['companias'] = Compania.objects.all().order_by('nombre')
+        
+        empresa = self.request.GET.get('empresa')
+        if empresa:
+            context['dids'] = DID.objects.filter(empresa=empresa)
+        
+        return context
+
+class DIDUpdateView(UpdateView):
+    model = DID
+    template_name = 'DIDs/UpdateDIDs.html'
+    fields = ['empresa', 'minutos_uso']
+    success_url = reverse_lazy('BusDIDsByCompany')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['companias'] = Compania.objects.all().order_by('nombre')
+        return context
+
+class DIDDeleteView(DeleteView):
+    model = DID
+    template_name = 'DIDs/DeleteDIDs.html'
+    success_url = reverse_lazy('BusDIDsByCompany')
+
 
 class TarifaListView(TemplateView): 
         
-    template_name = 'dids/PriceSearch.html' 
+    template_name = 'DIDs/PriceSearch.html' 
         
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs) 
@@ -61,13 +92,13 @@ class TarifaListView(TemplateView):
 class TarifaCreateView(CreateView): 
     
     model = Tarifa 
-    template_name = 'dids/NewPrice.html' 
+    template_name = 'DIDs/NewPrice.html' 
     fields = ['trafico_entrante', 'trafico_saliente', 'precio_por_numero', 'pais'] 
-    success_url = reverse_lazy('inicio')
+    success_url = reverse_lazy('Inicio')
 
 class CompaniaListView(TemplateView): 
     
-    template_name = 'dids/CompanySearch.html' 
+    template_name = 'DIDs/CompanySearch.html' 
     
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs) 
@@ -84,6 +115,6 @@ class CompaniaListView(TemplateView):
 class CompaniaCreateView(CreateView): 
     
     model = Compania 
-    template_name = 'dids/NewCompany.html' 
+    template_name = 'DIDs/NewCompany.html' 
     fields = ['direccion', 'codigo_postal', 'nombre', 'persona_contacto', 'NOCemail'] 
-    success_url = reverse_lazy('inicio')
+    success_url = reverse_lazy('Inicio')
