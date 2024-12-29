@@ -7,12 +7,12 @@ from .models import DID, Tarifa, Compania
 
 class InicioView(TemplateView): 
     
-    template_name = 'DIDs/Inicio.html'
+    template_name = 'dids/Inicio.html'
 
 
 class DIDListView(TemplateView): 
     
-    template_name = 'DIDs/DIDsSearch.html' 
+    template_name = 'dids/DIDsSearch.html' 
         
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs) 
@@ -29,7 +29,7 @@ class DIDListView(TemplateView):
 class DIDCreateView(CreateView): 
     
     model = DID 
-    template_name = 'DIDs/NewDIDs.html' 
+    template_name = 'dids/NewDIDs.html' 
     fields = ['numero', 'pais', 'empresa', 'minutos_uso'] 
     success_url = reverse_lazy('Inicio') 
     
@@ -44,7 +44,7 @@ class DIDCreateView(CreateView):
     
 
 class DIDCompanySearchView(TemplateView):
-    template_name = 'DIDs/UD_DIDs.html'
+    template_name = 'dids/UD_DIDs.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,7 +58,7 @@ class DIDCompanySearchView(TemplateView):
 
 class DIDUpdateView(UpdateView):
     model = DID
-    template_name = 'DIDs/UpdateDIDs.html'
+    template_name = 'dids/UpdateDIDs.html'
     fields = ['empresa', 'minutos_uso']
     success_url = reverse_lazy('BusDIDsByCompany')
 
@@ -69,36 +69,43 @@ class DIDUpdateView(UpdateView):
 
 class DIDDeleteView(DeleteView):
     model = DID
-    template_name = 'DIDs/DeleteDIDs.html'
+    template_name = 'dids/DeleteDIDs.html'
     success_url = reverse_lazy('BusDIDsByCompany')
 
 
-class TarifaListView(TemplateView): 
-        
-    template_name = 'DIDs/PriceSearch.html' 
-        
-    def get_context_data(self, **kwargs): 
-        context = super().get_context_data(**kwargs) 
-        pais = self.request.GET.get('pais') 
-            
-        if pais: 
-            try: 
-                context['resultado'] = Tarifa.objects.get(pais=pais) 
-            except Tarifa.DoesNotExist: 
-                context['mensaje'] = "We currently don't have a price for the requested country" 
-            
+class TarifaSearchView(TemplateView):
+    template_name = 'dids/PriceSearch.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tarifas'] = Tarifa.objects.all().order_by('pais')
+        pais = self.request.GET.get('pais')
+        if pais:
+            context['tarifa'] = get_object_or_404(Tarifa, pais=pais)
         return context
+
+class TarifaUpdateView(UpdateView):
+    model = Tarifa
+    template_name = 'dids/UpdatePrice.html'
+    fields = ['trafico_entrante', 'trafico_saliente', 'precio_por_numero']
+    success_url = reverse_lazy('BusTar')
+
+class TarifaDeleteView(DeleteView):
+    model = Tarifa
+    template_name = 'dids/DeletePrice.html'
+    success_url = reverse_lazy('BusTar')
+
 
 class TarifaCreateView(CreateView): 
     
     model = Tarifa 
-    template_name = 'DIDs/NewPrice.html' 
+    template_name = 'dids/NewPrice.html' 
     fields = ['trafico_entrante', 'trafico_saliente', 'precio_por_numero', 'pais'] 
     success_url = reverse_lazy('Inicio')
 
 class CompaniaListView(TemplateView): 
     
-    template_name = 'DIDs/CompanySearch.html' 
+    template_name = 'dids/CompanySearch.html' 
     
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs) 
@@ -115,6 +122,6 @@ class CompaniaListView(TemplateView):
 class CompaniaCreateView(CreateView): 
     
     model = Compania 
-    template_name = 'DIDs/NewCompany.html' 
+    template_name = 'dids/NewCompany.html' 
     fields = ['direccion', 'codigo_postal', 'nombre', 'persona_contacto', 'NOCemail'] 
     success_url = reverse_lazy('Inicio')

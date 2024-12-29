@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,10 @@
             font-family: Arial, sans-serif;
         }
 
+        h1 {
+            text-align: center; /* Centrar título */
+        }
+
         form {
             max-width: 400px;
             margin: 0 auto;
@@ -19,13 +24,16 @@
             border-radius: 10px;
         }
 
-        label, select, input {
+        label,
+        select,
+        input {
             display: block;
             width: 100%;
             margin-bottom: 10px;
         }
 
-        select, input[type="number"] {
+        select,
+        input[type="number"] {
             padding: 8px;
             border-radius: 5px;
             border: 1px solid white;
@@ -49,6 +57,7 @@
         }
     </style>
 </head>
+
 <body>
 
     {% extends "dids/inicio.html" %} {% load static %}
@@ -73,4 +82,6 @@
 
     {% endblock %}
 </body>
+
 </html>
+
