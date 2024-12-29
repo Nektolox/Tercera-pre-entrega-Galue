@@ -103,21 +103,39 @@ class TarifaCreateView(CreateView):
     fields = ['trafico_entrante', 'trafico_saliente', 'precio_por_numero', 'pais'] 
     success_url = reverse_lazy('Inicio')
 
-class CompaniaListView(TemplateView): 
-    
-    template_name = 'dids/CompanySearch.html' 
-    
-    def get_context_data(self, **kwargs): 
-        context = super().get_context_data(**kwargs) 
-        nombre = self.request.GET.get('nombre') 
-        
-        if nombre: 
-            try: 
-                context['resultado'] = Compania.objects.get(nombre=nombre) 
-            except Compania.DoesNotExist: 
-                context['mensaje'] = "This company is not registered yet." 
-        
+class CompaniaSearchView(TemplateView):
+    template_name = 'dids/CompanySearch.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['companias'] = Compania.objects.all().order_by('nombre')
+        nombre = self.request.GET.get('nombre')
+        if nombre:
+            context['compania'] = get_object_or_404(Compania, nombre=nombre)
         return context
+
+class CompaniaUpdateView(UpdateView):
+    model = Compania
+    template_name = 'dids/UpdateCompany.html'
+    fields = ['nombre', 'direccion', 'codigo_postal', 'persona_contacto', 'NOCemail']
+    success_url = reverse_lazy('BusComp')
+
+    def form_valid(self, form):
+        # Obtener el objeto antes de aplicar el formulario de actualización
+        self.object = self.get_object()
+        old_nombre = self.object.nombre
+        response = super().form_valid(form)
+        new_nombre = form.cleaned_data['nombre']
+        # Actualizar el campo empresa de todos los DIDs que tenían el nombre anterior
+        DID.objects.filter(empresa=old_nombre).update(empresa=new_nombre)
+        return response
+
+
+class CompaniaDeleteView(DeleteView):
+    model = Compania
+    template_name = 'dids/DeleteCompany.html'
+    success_url = reverse_lazy('BusComp')
+
 
 class CompaniaCreateView(CreateView): 
     
